@@ -15,7 +15,7 @@ class RecommendationService:
         
         return video_id_list
 
-    def get_recommendation_list(self, user_id, limit=40):
+    def get_recommendation_list(self, user_id, limit=40) -> List[str]:
         user_tag_map = self.get_user_tag_map(user_id)
         video_id_list = self.find_all_video_id()
         
