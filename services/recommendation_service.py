@@ -5,7 +5,9 @@ from pymongo import MongoClient
 
 class RecommendationService: 
     @inject
-    def __init__(self, db: MongoClient) -> None:
+    def __init__(self, db: MongoClient):
         self.db = db
+        print("Hello")
     
+
     
