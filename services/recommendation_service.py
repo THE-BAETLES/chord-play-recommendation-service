@@ -10,52 +10,44 @@ class RecommendationService:
     def __init__(self, db: MongoClient):
         self.db = db
         
-    
-    def get_tag_distance(self):
+    def find_all_video_id(self):     
+        video_id_list = list(map(lambda x: x['_id'], self.db['VIDEO'].find()))
         
-        pass
-    
-    def find_all(self):
-        pass
-    
-    
-    def find_one(self):
-        pass
-    
-    def find_all_video_tags(self) -> Dict[str, List[str]]:
-        """_summary_
-        
+        return video_id_list
 
-        Returns:
-            Dict[str, int]: 전처리된 tag, 해당 tag의 개수
-        """
-        pass
-    
-    def tags_to_dict(self):
-        pass
-    
-    def find_user_video_tags(self):
-        pass
-    
+    def get_recommendation_list(self, user_id, limit=40):
+        user_tag_map = self.get_user_tag_map(user_id)
+        video_id_list = self.find_all_video_id()
+        
+        candidate_music = []
+        for video_id in video_id_list:
+            candidate_music.append(self.get_jaccard_sim(user_tag_map, video_id))
+        
+        sorted_candidate_music = sorted(candidate_music, key=lambda x: -x['jaccard_sim'])
+        
+        return sorted_candidate_music[0:limit]
 
-    def get_user_video_tag_map(self, limit=1000):
-        """_summary_
-        Find users tag map limit means recently watch_list
-        태그 찾고 -> 태그 전처리 -> 
-        Args:
-            limit (int, optional): _description_. Defaults to 1000.
-        """
-        pass
-    def get_recommendation_list(self, ):
+    def get_jaccard_sim(self, user_tag_map, video_id):
+        tags = self.get_lower_tags(video_id)
+        weight_sum = 0
+        for tag in tags:
+            if tag in user_tag_map.keys():
+                weight_sum += user_tag_map[tag]
         
-        video_tag_map = self.find_all_video_tags()
-        user_tag_map = self.get_user_video_tag_map()
+        jaccard_sim = weight_sum / len(user_tag_map.keys())
+        return {
+            'video_id': video_id,
+            'jaccard_sim': jaccard_sim
+        }
+
+    def get_lower_tags(self, video_id):
+        video_collection = self.db['VIDEO']
+        tags = list(map(lambda x: x['tags'] if 'tags' in x.keys() else '',video_collection.find({'_id': video_id})))
         
-        return         
+        if len(tags) == 0:
+            return ['']
         
-    
-    
-    
-    
-    
-    
+        tags = tags[0]
+        lower_tags = list(map(lambda x: x.lower(), tags))
+        
+        return lower_tags
