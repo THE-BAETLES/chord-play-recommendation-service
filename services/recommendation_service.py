@@ -7,7 +7,6 @@ class RecommendationService:
     @inject
     def __init__(self, db: MongoClient):
         self.db = db
-        print("Hello")
     
 
     
