@@ -1,4 +1,4 @@
 # env
-*.env
+*.env*
 # cache
 **/__pycache__/
