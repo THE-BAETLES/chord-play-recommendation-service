@@ -19,11 +19,11 @@ listen_port = os.environ.get("SERVER_PORT")
 def recommendation() -> List[str]:
     request_params = request.args.to_dict()
     user_id = request.view_args['user_id']
-    offet = request_params["offset"]
+    offset = request_params["offset"]
     limit = request_params["limit"]
     
     
-    recommendation_list = service.get_recommendation_list(user_id, int(limit))
+    recommendation_list = service.get_recommendation_list(user_id, offset, limit)
     recommendation_video_id = list(map(lambda x: x['video_id'], recommendation_list))
     
     response = {
