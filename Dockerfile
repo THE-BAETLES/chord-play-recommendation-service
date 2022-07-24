@@ -1,4 +1,5 @@
-FROM python:latest
+FROM python:3.7.5-slim-buster AS compile-image
+
 LABEL maintainer "chobe1<chobe0719@gmail.com>"
 LABEL serverType="Recommendation Worker Server"
 
