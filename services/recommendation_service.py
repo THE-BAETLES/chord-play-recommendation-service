@@ -62,7 +62,7 @@ class RecommendationService:
         sorted_candidate_music = sorted(candidate_music, key=lambda x: -x['jaccard_sim'])
         
         print("sroted candidate", type(sorted_candidate_music))
-        return sorted_candidate_music[offset:limit]
+        return sorted_candidate_music[int(offset):int(limit)]
 
     def get_jaccard_sim(self, user_tag_map, video_id):
         tags = self.get_lower_tags(video_id)

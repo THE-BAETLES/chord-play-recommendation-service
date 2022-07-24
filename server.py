@@ -16,9 +16,9 @@ app = Flask(__name__)
 listen_port = os.environ.get("SERVER_PORT")
 
 @app.route('/recommendation/<user_id>', methods=["GET"])
-def recommendation() -> List[str]:
+def recommendation(user_id) -> List[str]:
     request_params = request.args.to_dict()
-    user_id = request.view_args['user_id']
+    # user_id = request.view_args['user_id']
     offset = request_params["offset"]
     limit = request_params["limit"]
     
