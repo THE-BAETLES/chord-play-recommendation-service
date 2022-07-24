@@ -67,8 +67,9 @@ class RecommendationService:
         # To avoid out of index error
         
         start_index = min(int(offset), candidate_music_length)
-        limit_index = max(candidate_music_length, int(offset)+int(limit))
+        limit_index = min(candidate_music_length, int(offset)+int(limit))
         
+        print("start_index = ", start_index, "limit_index = ", limit_index)
         return sorted_candidate_music[start_index:limit_index]
 
     def get_jaccard_sim(self, user_tag_map, video_id):
