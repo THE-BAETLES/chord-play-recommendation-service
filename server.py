@@ -22,7 +22,6 @@ def recommendation() -> List[str]:
     offset = request_params["offset"]
     limit = request_params["limit"]
     
-    
     recommendation_list = service.get_recommendation_list(user_id, offset, limit)
     recommendation_video_id = list(map(lambda x: x['video_id'], recommendation_list))
     
