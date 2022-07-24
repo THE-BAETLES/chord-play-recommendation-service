@@ -1,6 +1,6 @@
 FROM python:latest
 LABEL maintainer "chobe1<chobe0719@gmail.com>"
-LABEL serverType="Sheet Generate Engine Server"
+LABEL serverType="Recommendation Worker Server"
 
 COPY . /recommendationServer
 WORKDIR /recommendationServer
