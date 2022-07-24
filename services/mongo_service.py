@@ -13,7 +13,6 @@ class MongoModule(Module):
         host = configuration.config['MONGO_HOST']
         uri = "mongodb://%s:%s@%s" % (quote_plus(user), quote_plus(password), quote_plus(host))
         client = MongoClient(uri)
-        
         return client
 
         
