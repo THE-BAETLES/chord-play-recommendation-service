@@ -18,9 +18,8 @@ print(f"[Recommendation Server] start listen on {listen_port}")
 
 @app.get('/test')
 async def test(): 
-    recommendation_list = service.find_all_video_id()
+    recommendation_list = service.test()
     print(recommendation_list)
-    return "hello"
 
 @app.get('/recommendation/{user_id}')
 async def recommendation(user_id: str, offset: int, limit: int) -> List[str]:

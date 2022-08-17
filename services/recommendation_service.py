@@ -1,4 +1,5 @@
 import os
+from bson import DBRef, ObjectId
 from injector import Module, provider, Injector, inject, singleton
 from pymongo import MongoClient
 from typing import Dict, List
@@ -11,7 +12,9 @@ class RecommendationService:
         print("reco start")
         self.db = db['chordplay']
     
-
+    def test(self):
+        return self.db['WATCH_HISTORY'].find({'user': DBRef('USER', ObjectId('62e50e3b74b7f274bb324516'))})[0]['play_count']
+    
     def find_all_video_id(self):     
         video_id_list = list(map(lambda x: x['_id'], self.db['VIDEO'].find()))
         
@@ -35,10 +38,10 @@ class RecommendationService:
     #   sort by date
         watch_history_collection = self.db['WATCH_HISTORY']
         
-        watch_info_list = watch_history_collection.find({'user_id': user_id}).sort("last_played", -1)
+        watch_info_list = watch_history_collection.find({'user': DBRef('USER', ObjectId(f'{user_id}'))}).sort("last_played", -1)
         
         for watch_info in watch_info_list[:min(40, len(watch_info_list))]:
-            video_id = watch_info['video_id']
+            video_id = watch_info['video'].id
             count = watch_info['play_count']
             tags = self.get_lower_tags(video_id)
             for tag in tags:
