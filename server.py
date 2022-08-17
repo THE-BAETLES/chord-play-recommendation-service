@@ -1,5 +1,4 @@
 from injector import Injector
-from numpy import void
 from configs.config import get_development_config
 from services.mongo_service import MongoModule
 from services.recommendation_service import RecommendationService
@@ -18,7 +17,7 @@ service = injector.get(RecommendationService)
 print(f"[Recommendation Server] start listen on {listen_port}")
 
 @app.get('/test')
-async def test() -> void: 
+async def test(): 
     recommendation_list = service.find_all_video_id()
     print(recommendation_list)
     return "hello"

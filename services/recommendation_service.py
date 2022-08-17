@@ -1,4 +1,3 @@
-import numpy as np
 import os
 from injector import Module, provider, Injector, inject, singleton
 from pymongo import MongoClient
