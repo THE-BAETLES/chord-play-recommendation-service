@@ -1,4 +1,5 @@
 from injector import Injector
+from numpy import void
 from configs.config import get_development_config
 from services.mongo_service import MongoModule
 from services.recommendation_service import RecommendationService
@@ -6,37 +7,34 @@ import dotenv
 from flask import Flask, app, jsonify, request
 import os
 from typing import List
-
+from fastapi import FastAPI
 dotenv.load_dotenv("development.env")
-
-global service
-
-app = Flask(__name__)
+app = FastAPI()
 
 listen_port = os.environ.get("SERVER_PORT")
 
-@app.route('/recommendation/<user_id>', methods=["GET"])
-def recommendation(user_id) -> List[str]:
-    request_params = request.args.to_dict()
-    # user_id = request.view_args['user_id']
-    offset = request_params["offset"]
-    limit = request_params["limit"]
-    
+injector = Injector([get_development_config, MongoModule()])
+service = injector.get(RecommendationService)
+print(f"[Recommendation Server] start listen on {listen_port}")
+
+@app.get('/test')
+async def test() -> void: 
+    recommendation_list = service.find_all_video_id()
+    print(recommendation_list)
+    return "hello"
+
+@app.get('/recommendation/{user_id}')
+async def recommendation(user_id: str, offset: int, limit: int) -> List[str]:
+    offset = int(offset)
+    limit = int(limit)
     recommendation_list = service.get_recommendation_list(user_id, offset, limit)
     recommendation_video_id = list(map(lambda x: x['video_id'], recommendation_list))
-    
     response = {
         'payload': {
             'number': limit,
             'recommendation_list':  recommendation_video_id
         }
     }
-    
     return jsonify(response)
     
-if __name__ == '__main__':
-    injector = Injector([get_development_config, MongoModule()])
-    # print({**dotenv_values("development.env")})
-    service = injector.get(RecommendationService)
-    print(f"[Recommendation Server] start listen on {listen_port}")
-    app.run(host='0.0.0.0', port=listen_port)
+    

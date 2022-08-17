@@ -8,10 +8,13 @@ class MongoModule(Module):
     @singleton
     @provider
     def provide_mongo_connection(self, configuration: Configuration) -> MongoClient:
+        print("[MONGO_CLIENT_CONNECTION] start")
         user = configuration.config['MONGO_USER']
         password = configuration.config['MONGO_PASSWORD']
         host = configuration.config['MONGO_HOST']
-        uri = "mongodb://%s:%s@%s" % (quote_plus(user), quote_plus(password), quote_plus(host))
+        replicaset = configuration.config['MONGO_REPLICASET']
+        uri = f"mongodb://{host}/?replicaSet={replicaset}"
+        print("[MONGO_CLIENT_CONNECTION] end")
         client = MongoClient(uri)
         return client
 

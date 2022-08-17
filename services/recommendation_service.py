@@ -9,8 +9,10 @@ class RecommendationService:
     @inject
     def __init__(self, db: MongoClient):
         # 
+        print("reco start")
         self.db = db['chordplay']
-        
+    
+
     def find_all_video_id(self):     
         video_id_list = list(map(lambda x: x['_id'], self.db['VIDEO'].find()))
         
@@ -36,7 +38,7 @@ class RecommendationService:
         
         watch_info_list = watch_history_collection.find({'user_id': user_id}).sort("last_played", -1)
         
-        for watch_info in watch_info_list[:40]:
+        for watch_info in watch_info_list[:min(40, len(watch_info_list))]:
             video_id = watch_info['video_id']
             count = watch_info['play_count']
             tags = self.get_lower_tags(video_id)

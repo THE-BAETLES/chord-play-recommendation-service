@@ -11,4 +11,4 @@ ENV SERVER_PORT 3000
 RUN pip install -r requirements.txt
 EXPOSE 3000
 
-ENTRYPOINT ["python", "server.py"]
+ENTRYPOINT ["uvicorn", "server:app --reload --host=0.0.0.0 --port=3000"]
