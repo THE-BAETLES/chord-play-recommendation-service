@@ -40,7 +40,7 @@ class RecommendationService:
         watch_history_collection = self.db['WATCH_HISTORY']
         watch_info_list = watch_history_collection.find({'user': DBRef('USER', ObjectId(f'{user_id}'))}).sort("last_played", -1)
         
-        for watch_info in watch_info_list[:min(40, len(watch_info_list))]:
+        for watch_info in watch_info_list[:40]:
             video_id = watch_info['video'].id
             count = watch_info['play_count']
             self.update_tag_map(user_tag_map, video_id, count)

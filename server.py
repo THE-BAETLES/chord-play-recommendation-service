@@ -21,18 +21,21 @@ print(f"[Recommendation Server] start listen on {listen_port}")
 async def health_check():
     return "I`m Healthy now"
 
-@app.get('/recommendation/{user_id}')
-async def recommendation(user_id: str, offset: int, limit: int) -> List[str]:
+@app.get("/recommendation/{user_id}")
+async def recommendation(user_id: str, offset:int,limit:int) -> List[str]:
     offset = int(offset)
     limit = int(limit)
-    recommendation_list = service.get_recommendation_list(user_id, offset, limit)
-    recommendation_video_id = list(map(lambda x: x['video_id'], recommendation_list))
-    response = {
-        'payload': {
-            'number': limit,
-            'recommendation_list':  recommendation_video_id
+    try:
+        recommendation_list = service.get_recommendation_list(user_id, offset, limit)
+        recommendation_video_id = list(map(lambda x: x['video_id'], recommendation_list))
+        response = {
+            'payload': {
+                'number': limit,
+                'recommendation_list':  recommendation_video_id
+            }
         }
-    }
-    return jsonify(response)
-    
+    except:
+        print("error occur")
+    finally:
+        return response    
     
