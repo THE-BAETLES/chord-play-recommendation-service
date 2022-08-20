@@ -16,10 +16,10 @@ injector = Injector([get_development_config, MongoModule()])
 service = injector.get(RecommendationService)
 print(f"[Recommendation Server] start listen on {listen_port}")
 
-@app.get('/test')
-async def test(): 
-    recommendation_list = service.test()
-    print(recommendation_list)
+
+@app.get('/healthCheck')
+async def health_check():
+    return "I`m Healthy now"
 
 @app.get('/recommendation/{user_id}')
 async def recommendation(user_id: str, offset: int, limit: int) -> List[str]:

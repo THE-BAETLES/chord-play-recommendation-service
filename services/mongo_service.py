@@ -13,7 +13,8 @@ class MongoModule(Module):
         password = configuration.config['MONGO_PASSWORD']
         host = configuration.config['MONGO_HOST']
         replicaset = configuration.config['MONGO_REPLICASET']
-        uri = f"mongodb://{host}/?replicaSet={replicaset}"
+        uri = f"mongodb://{user}:{password}@{host}/?replicaSet={replicaset}&readPreference=primary"
+        print("uri = ", uri)
         print("[MONGO_CLIENT_CONNECTION] end")
         client = MongoClient(uri)
         return client

@@ -34,10 +34,8 @@ class RecommendationService:
     
     def get_user_tag_map(self, user_id: str):
         user_tag_map = {}
-            
     #   sort by date
         watch_history_collection = self.db['WATCH_HISTORY']
-        
         watch_info_list = watch_history_collection.find({'user': DBRef('USER', ObjectId(f'{user_id}'))}).sort("last_played", -1)
         
         for watch_info in watch_info_list[:min(40, len(watch_info_list))]:
