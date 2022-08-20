@@ -13,7 +13,7 @@
 **요청 URL**
 
 ```
-{recommendation_host}/v1/recommendation
+{recommendation_host}/recommendation
 ```
 
 **요청 본문**
