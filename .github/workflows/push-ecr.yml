@@ -3,10 +3,10 @@ name: Deploy to Amazon Private ECR
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
       
 env:
   AWS_REGION: ap-north-east-2
