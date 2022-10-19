@@ -47,7 +47,12 @@ class RecommendationService:
                                 
     def create_signup_favorite_user_tag_map(self, user_tag_map, user_id: str):
         user_db = self.db['USER']
-        user_signup_favorite_list: List[str]= user_db.find_one({'_id': ObjectId(user_id)})['signup_favorite']
+        
+        user_signup_favorite_list = []
+        user_table = user_db.find_one({'_id': ObjectId(user_id)})
+        
+        if 'signup_favorite' in user_table.keys():
+            user_signup_favorite_list: List[str]= user_db.find_one({'_id': ObjectId(user_id)})['signup_favorite']
         
         for video_id in user_signup_favorite_list:
             self.update_tag_map(user_tag_map, video_id, 1)
@@ -84,7 +89,8 @@ class RecommendationService:
             if tag in user_tag_map.keys():
                 weight_sum += user_tag_map[tag]
         
-        jaccard_sim = weight_sum / len(user_tag_map.keys())
+        user_tag_map_length = len(user_tag_map.keys()) if len(user_tag_map.keys()) != 0 else 987654321
+        jaccard_sim = weight_sum / user_tag_map_length
         return {
             'video_id': video_id,
             'jaccard_sim': jaccard_sim
